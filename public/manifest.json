@@ -1,0 +1,32 @@
+{
+    "name": "NextJS supabase dashboard",
+    "short_name": "NextJS supabase dashboard",
+    "description": "This is a dashboard starter template for the NextJS 14 app router using supabase based on shadcn-ui.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#66B814",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/assets/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/icons/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
