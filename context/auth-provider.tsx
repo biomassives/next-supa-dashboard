@@ -1,8 +1,7 @@
-context/auth-provider.tsx
+// /context/auth-provider.tsx
 'use client'
 
 import * as React from 'react'
-
 import { Session, User } from '@supabase/supabase-js'
 import { createClient } from '@/supabase/client'
 
