@@ -4,25 +4,68 @@
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'  // Changed from @supabase/ssr
 import { useRouter, useSearchParams } from 'next/navigation'
+import type { User } from '@supabase/supabase-js'
+
+type AuthError = {
+  message: string
+  status?: number
+  __isAuthError?: boolean
+}
 
 export default function AuthTest() {
-  const [status, setStatus] = useState<any>(null)
-  const [error, setError] = useState<any>(null)
+  const [status, setStatus] = useState<{ user: User | null } | null>(null)
+  const [error, setError] = useState<AuthError | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClientComponentClient()
+
   
   useEffect(() => {
-    const errorMsg = searchParams.get('error')
-    if (errorMsg) {
-      setError({ message: decodeURIComponent(errorMsg) })
-    }
-  }, [searchParams])
+    const initAuth = async () => {
+      try {
+        setLoading(true)
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError) {
+          console.error('Session error:', sessionError)
+          setError({
+            message: 'Failed to initialize session',
+            status: 400,
+            __isAuthError: true
+          })
+          return
+        }
 
-  useEffect(() => {
-    checkAuth()
-  }, [])
+        if (session) {
+          setStatus({ user: session.user })
+        }
+
+        // Set up auth state listener
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          async (event, session) => {
+            console.log('Auth state changed:', event)
+            setStatus({ user: session?.user ?? null })
+          }
+        )
+
+        return () => {
+          subscription.unsubscribe()
+        }
+      } catch (e) {
+        console.error('Auth initialization error:', e)
+        setError({
+          message: (e as Error).message,
+          __isAuthError: true
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    initAuth()
+  }, [supabase.auth])
+
 
   async function checkAuth() {
     try {
@@ -102,6 +145,20 @@ export default function AuthTest() {
           Sign Out
         </button>
       </div>
+
+
+      <div className="mt-4">
+        <p className="text-sm font-medium">
+          Status: {loading ? 'Loading...' : status?.user ? 'Authenticated' : 'Not Authenticated'}
+        </p>
+        {error?.__isAuthError && (
+          <p className="text-sm text-red-600">
+            Session Error: {error.message}
+          </p>
+        )}
+      </div>
+
+
       {loading && (
         <div className="text-center py-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
