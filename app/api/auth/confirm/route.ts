@@ -1,22 +1,11 @@
-// /app/api/auth/confirm/route.ts
+// app/api/auth/confirm/route.ts
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { type EmailOtpType } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-
-//const { origin } = new URL(request.url)
-
-
-
-
-/**
- * Email Auth with PKCE flow for SSR
- *
- * @link https://supabase.com/docs/guides/auth/server-side/email-based-auth-with-pkce-flow-for-ssr
- */
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
+  const { searchParams, origin } = new URL(request.url) // Define origin here
   const token_hash = searchParams.get('token_hash') as string
   const type = searchParams.get('type') as EmailOtpType | null
   // if "next" is in param, use it as the redirect URL
@@ -48,16 +37,13 @@ export async function GET(request: NextRequest) {
 
     if (!error) {
       return NextResponse.redirect(redirectTo)
+    } else {  // Error handling block
+      console.error(error) // Log the error
+      redirectTo.pathname = '/auth/auth-code-error'
+      return NextResponse.redirect(redirectTo) 
     }
+  } else { // No token_hash or type
+    redirectTo.pathname = '/auth/auth-code-error' 
+    return NextResponse.redirect(`${origin}${redirectTo.pathname}`) 
   }
-
-  // return the user to an error page with some instructions
-
-  if (error) {
-    redirectTo.pathname = '/auth/auth-code-error'
-    return NextResponse.redirect(redirectTo) 
-  }
-
-  
-
 }

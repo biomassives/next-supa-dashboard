@@ -1,16 +1,17 @@
+// /app/api/auth/callback/route.ts
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { type CookieOptions, createServerClient } from '@supabase/ssr'
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url) // Removed extra 
+  const  
+
+ { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/' // Removed extra 
+  const next = searchParams.get('next')  
+ ?? '/'
   const redirectTo = new URL(next, origin) // Create URL object with origin
-
-
-  if (token_hash && type) {
 
   if (code) {
     const cookieStore = cookies()
@@ -26,23 +27,24 @@ export async function GET(request: Request) {
             cookieStore.set({ name, value, ...options })
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options }) // Removed extra  
+            cookieStore.delete({ name, ...options  
+ })
           },
         },
       }
     )
 
-    const { error } = await supabase.auth.verifyOtp({ type, token_hash })
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error) {
-      return NextResponse.redirect(redirectTo)
-    } else {  // Error handling block
-      console.error(error) // Log the error
+      return NextResponse.redirect(redirectTo)  
+
+    } else {
+      console.error(error)
       redirectTo.pathname = '/auth/auth-code-error'
-      return NextResponse.redirect(redirectTo) 
+      return NextResponse.redirect(redirectTo) // Use redirectTo directly
     }
   }
-}
 
   return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
