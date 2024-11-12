@@ -1,12 +1,18 @@
+// /app/api/auth/callback/route.ts
+
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { type CookieOptions, createServerClient } from '@supabase/ssr'
+
+
 
 /**
  * OAuth with PKCE flow for SSR
  *
  * @link https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
  */
+
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -33,10 +39,22 @@ export async function GET(request: Request) {
       }
     )
 
+
+
+    const { origin } = new URL(request.url) 
+
+    if (token_hash && type) {
+
+      
+      
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      return NextResponse.redirect(redirectTo)
+    } else {  // Error handling block
+      console.error(error) // Log the error
+      redirectTo.pathname = '/auth/auth-code-error'
+      return NextResponse.redirect(`${origin}${redirectTo.pathname}`) 
     }
   }
 
