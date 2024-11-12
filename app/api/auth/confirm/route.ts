@@ -1,7 +1,17 @@
+// /app/api/auth/confirm/route.ts
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { type EmailOtpType } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
+
+
+const { origin } = new URL(request.url)
+
+if (error) {
+  redirectTo.pathname = '/auth/auth-code-error'
+  return NextResponse.redirect(`<span class="math-inline">\{origin\}</span>{redirectTo.pathname}`) 
+}
+
 
 /**
  * Email Auth with PKCE flow for SSR
@@ -45,6 +55,11 @@ export async function GET(request: NextRequest) {
   }
 
   // return the user to an error page with some instructions
-  redirectTo.pathname = '/auth/auth-code-error'
-  return NextResponse.redirect(redirectTo)
+
+  if (error) {
+    redirectTo.pathname = '/auth/auth-code-error'
+    return NextResponse.redirect(redirectTo) 
+  }
+  
+
 }
