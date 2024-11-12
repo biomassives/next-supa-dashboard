@@ -7,10 +7,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 const { origin } = new URL(request.url)
 
-if (error) {
-  redirectTo.pathname = '/auth/auth-code-error'
-  return NextResponse.redirect(`<span class="math-inline">\{origin\}</span>{redirectTo.pathname}`) 
-}
+
 
 
 /**
@@ -60,6 +57,7 @@ export async function GET(request: NextRequest) {
     redirectTo.pathname = '/auth/auth-code-error'
     return NextResponse.redirect(redirectTo) 
   }
+
   
 
 }
