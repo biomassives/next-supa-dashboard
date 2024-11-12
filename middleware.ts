@@ -2,50 +2,50 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { updateSession } from '@/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  try {
-    const { response, authenticated } = await updateSession(request)
-    
-    // Generate random nonce for CSP
-    const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
-    
-    // Get response headers
-    const requestHeaders = new Headers(response.headers)
-    
-    // Add CSP header with nonce
-    requestHeaders.set(
-      'Content-Security-Policy',
-      `
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' 'nonce-${nonce}';
-        style-src 'self' 'unsafe-inline';
-        img-src 'self' blob: data: https:;
-        font-src 'self';
-        connect-src 'self' ${process.env.NEXT_PUBLIC_SUPABASE_URL} https://api.supabase.co;
-        frame-src 'self' https://accounts.google.com;
-        frame-ancestors 'self';
-      `.replace(/\s+/g, ' ').trim()
-    )
-    
-    // Set nonce in request header for use in pages
-    requestHeaders.set('x-nonce', nonce)
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req: request, res })
 
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    })
+  try {
+    // Refresh the session if it exists
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    
+    if (sessionError) {
+      console.error('Session error in middleware:', sessionError)
+    }
+
+    // Handle protected routes
+    if (request.nextUrl.pathname.startsWith('/dashboard')) {
+      if (!session) {
+        return NextResponse.redirect(new URL('/auth/signin', request.url))
+      }
+    }
+
+    // Handle auth routes when already authenticated
+    if (request.nextUrl.pathname.startsWith('/auth/signin') && session) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    return res
+
   } catch (error) {
     console.error('Middleware error:', error)
-    return NextResponse.next()
+    return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
 }
 
 export const config = {
   matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
     '/',
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+    '/dashboard/:path*',
+    '/auth/:path*'
+  ]
 }
