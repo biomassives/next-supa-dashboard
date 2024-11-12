@@ -91,17 +91,18 @@ export default function AuthTest() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback`, // Make sure this matches your callback route
           queryParams: {
             access_type: 'offline',
-            prompt: 'consent'
+            prompt: 'consent',
+            next: '/dashboard' // Where to go after successful auth
           }
         }
       })
       if (error) throw error
     } catch (e) {
       setError(formatError(e))
-      console.error('Google login error:', e)
+      console.error( e)
     } finally {
       setLoading(false)
     }
