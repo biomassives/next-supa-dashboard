@@ -28,7 +28,7 @@ const SignInWithGoogle = ({
       const next = (searchParams.get('next') as string) ?? '/dashboard'
 
       const supabase = createClient()
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           // A URL to send the user to after they are confirmed.
@@ -46,18 +46,12 @@ const SignInWithGoogle = ({
       })
 
       if (error) {
-        console.error('Error signing in with Google:', error);
-        toast.error(error.message);
-      } 
-
-      // Optionally handle successful sign-in here, e.g.,
-      // if (data) {
-      //   // Redirect or update state
-      // }
+        toast.error(error.message)
+      }
     } catch (e: unknown) {
-      console.error('Unexpected error during sign-in:', e);
-      toast.error('An unexpected error occurred.');
+      toast.error((e as Error)?.message)
     }
+
   }
 
   return (
