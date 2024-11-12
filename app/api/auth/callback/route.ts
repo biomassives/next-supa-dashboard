@@ -14,10 +14,17 @@ import { type CookieOptions, createServerClient } from '@supabase/ssr'
 
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
+
+
+  const  
+ { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/'
+  const next = searchParams.get('next')  
+ ?? '/'
+  const redirectTo = request.nextUrl.clone()
+  redirectTo.pathname = next
+  
+
 
   if (code) {
     const cookieStore = cookies()
@@ -41,24 +48,17 @@ export async function GET(request: Request) {
 
 
 
-    const { origin } = new URL(request.url) 
-
-    if (token_hash && type) {
-
-      
-      
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error) {
-      return NextResponse.redirect(redirectTo)
-    } else {  // Error handling block
-      console.error(error) // Log the error
+      return NextResponse.redirect(redirectTo)  
+
+    } else {
+      console.error(error)
       redirectTo.pathname = '/auth/auth-code-error'
-      return NextResponse.redirect(`${origin}${redirectTo.pathname}`) 
+      return NextResponse.redirect(`${origin}${redirectTo.pathname}`)
     }
   }
-}
 
-  // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
