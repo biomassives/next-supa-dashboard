@@ -1,17 +1,19 @@
+
+// @/components/auth-test.tsx
 'use client'
 
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { testAuth } from '@/utils/test-auth'
+import { testAuth } from '@/lib/utils/test-auth'  // Updated path
 
 export default function AuthTest() {
   const [status, setStatus] = useState<any>(null)
   const [error, setError] = useState<any>(null)
   
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+  
+  const supabase = createClient(supabaseUrl, supabaseKey)
 
   async function checkAuth() {
     try {
@@ -44,7 +46,7 @@ export default function AuthTest() {
     try {
       setError(null)
       const { error } = await supabase.auth.signInWithPassword({
-        email: 'test@example.com', // Replace with test credentials
+        email: 'test@example.com',
         password: 'password123'
       })
       if (error) throw error
