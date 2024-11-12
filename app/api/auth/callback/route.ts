@@ -34,17 +34,22 @@ export async function GET(request: Request) {
       }
     )
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
-      return NextResponse.redirect(redirectTo)  
 
+    if (code) {
+
+
+    const { error, data } = await supabase.auth.exchangeCodeForSession(code)
+
+    
+    if (!error && data.session) { // Check for session
+      return NextResponse.redirect(redirectTo)
     } else {
       console.error(error)
       redirectTo.pathname = '/auth/auth-code-error'
-      return NextResponse.redirect(redirectTo) // Use redirectTo directly
+      return NextResponse.redirect(redirectTo)
     }
   }
-
+}
   return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
