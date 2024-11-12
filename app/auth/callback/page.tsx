@@ -1,9 +1,9 @@
-// app/auth/callback/page.tsx
+// @/app/auth/callback/page.tsx
 'use client'
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from '@supabase/ssr'  // Fixed import
 
 export default function AuthCallbackPage() {
   const router = useRouter()
