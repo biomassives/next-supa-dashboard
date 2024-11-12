@@ -2,14 +2,28 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'  // Changed from @supabase/ssr
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter, useSearchParams } from 'next/navigation'
-import type { User } from '@supabase/supabase-js'
+import type { User, AuthError as SupabaseAuthError } from '@supabase/supabase-js'
 
 type AuthError = {
   message: string
   status?: number
   __isAuthError?: boolean
+}
+
+function formatError(error: unknown): AuthError {
+  if (error instanceof Error) {
+    return {
+      message: error.message,
+      __isAuthError: 'status' in error,
+      status: 'status' in error ? (error as any).status : undefined
+    }
+  }
+  return {
+    message: 'An unknown error occurred',
+    __isAuthError: false
+  }
 }
 
 export default function AuthTest() {
@@ -20,7 +34,6 @@ export default function AuthTest() {
   const searchParams = useSearchParams()
   const supabase = createClientComponentClient()
 
-  
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -28,20 +41,13 @@ export default function AuthTest() {
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
         if (sessionError) {
-          console.error('Session error:', sessionError)
-          setError({
-            message: 'Failed to initialize session',
-            status: 400,
-            __isAuthError: true
-          })
-          return
+          throw sessionError
         }
 
         if (session) {
           setStatus({ user: session.user })
         }
 
-        // Set up auth state listener
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
           async (event, session) => {
             console.log('Auth state changed:', event)
@@ -54,10 +60,7 @@ export default function AuthTest() {
         }
       } catch (e) {
         console.error('Auth initialization error:', e)
-        setError({
-          message: (e as Error).message,
-          __isAuthError: true
-        })
+        setError(formatError(e))
       } finally {
         setLoading(false)
       }
@@ -65,7 +68,6 @@ export default function AuthTest() {
 
     initAuth()
   }, [supabase.auth])
-
 
   async function checkAuth() {
     try {
@@ -75,8 +77,8 @@ export default function AuthTest() {
       if (authError) throw authError
       setStatus({ user })
     } catch (e) {
-      setError(e)
-      console.error(e)
+      setError(formatError(e))
+      console.error('Check auth error:', e)
     } finally {
       setLoading(false)
     }
@@ -98,8 +100,8 @@ export default function AuthTest() {
       })
       if (error) throw error
     } catch (e) {
-      setError(e)
-      console.error(e)
+      setError(formatError(e))
+      console.error('Google login error:', e)
     } finally {
       setLoading(false)
     }
@@ -113,8 +115,8 @@ export default function AuthTest() {
       setStatus(null)
       router.push('/')
     } catch (e) {
-      setError(e)
-      console.error(e)
+      setError(formatError(e))
+      console.error('Sign out error:', e)
     } finally {
       setLoading(false)
     }
@@ -146,24 +148,24 @@ export default function AuthTest() {
         </button>
       </div>
 
-
       <div className="mt-4">
         <p className="text-sm font-medium">
           Status: {loading ? 'Loading...' : status?.user ? 'Authenticated' : 'Not Authenticated'}
         </p>
-        {error?.__isAuthError && (
+        {error && (
           <p className="text-sm text-red-600">
-            Session Error: {error.message}
+            Error: {error.message}
+            {error.status && ` (Status: ${error.status})`}
           </p>
         )}
       </div>
-
 
       {loading && (
         <div className="text-center py-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
         </div>
       )}
+
       {error && (
         <div className="p-4 bg-red-100 text-red-700 rounded">
           <pre className="whitespace-pre-wrap">
@@ -171,6 +173,7 @@ export default function AuthTest() {
           </pre>
         </div>
       )}
+
       {status && (
         <div className="p-4 bg-green-100 text-green-700 rounded">
           <pre className="whitespace-pre-wrap">
