@@ -17,7 +17,7 @@ export default function RootPage() {
             <img
               className="rounded-md"
               src={absoluteUrl(
-                '/assets/images/main/photo-1549388604-817d15aa0110.jpg'
+                '/photo-1596275281743-e7399c7bdfa9?q=80&w=1624&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
               )}
               alt=""
             />
