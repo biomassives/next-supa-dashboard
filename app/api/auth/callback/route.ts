@@ -1,16 +1,12 @@
-// /app/api/auth/callback/route.ts
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { type CookieOptions, createServerClient } from '@supabase/ssr'
 
 export async function GET(request: Request) {
-  const  
-
- { searchParams, origin } = new URL(request.url)
+  const { searchParams, origin } = new URL(request.url) // Removed extra 
   const code = searchParams.get('code')
   // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next')  
- ?? '/'
+  const next = searchParams.get('next') ?? '/' // Removed extra 
   const redirectTo = new URL(next, origin) // Create URL object with origin
 
   if (code) {
@@ -27,8 +23,7 @@ export async function GET(request: Request) {
             cookieStore.set({ name, value, ...options })
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options  
- })
+            cookieStore.delete({ name, ...options }) // Removed extra  
           },
         },
       }
@@ -37,8 +32,7 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error) {
-      return NextResponse.redirect(redirectTo)  
-
+      return NextResponse.redirect(redirectTo) // Removed extra  
     } else {
       console.error(error)
       redirectTo.pathname = '/auth/auth-code-error'
