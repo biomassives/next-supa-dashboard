@@ -1,30 +1,17 @@
 // /app/api/auth/callback/route.ts
-
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { type CookieOptions, createServerClient } from '@supabase/ssr'
 
-
-
-/**
- * OAuth with PKCE flow for SSR
- *
- * @link https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
- */
-
-
 export async function GET(request: Request) {
-
-
   const  
+
  { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
+  // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next')  
  ?? '/'
-  const redirectTo = request.nextUrl.clone()
-  redirectTo.pathname = next
-  
-
+  const redirectTo = new URL(next, origin) // Create URL object with origin
 
   if (code) {
     const cookieStore = cookies()
@@ -40,13 +27,12 @@ export async function GET(request: Request) {
             cookieStore.set({ name, value, ...options })
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options })
+            cookieStore.delete({ name, ...options  
+ })
           },
         },
       }
     )
-
-
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
@@ -56,7 +42,7 @@ export async function GET(request: Request) {
     } else {
       console.error(error)
       redirectTo.pathname = '/auth/auth-code-error'
-      return NextResponse.redirect(`${origin}${redirectTo.pathname}`)
+      return NextResponse.redirect(redirectTo) // Use redirectTo directly
     }
   }
 
