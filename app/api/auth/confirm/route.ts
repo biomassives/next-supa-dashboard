@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
 
-const { origin } = new URL(request.url)
+//const { origin } = new URL(request.url)
 
 
 
