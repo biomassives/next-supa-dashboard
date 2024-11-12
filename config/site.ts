@@ -8,10 +8,10 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'Approvideo Manager',
-  title: 'DIY Sustainable Solutions',
+  name: 'DIY Solutions',
+  title: 'A P P R O V I D E O',
   description:
-    'Make changes here to the live site at approvideo.org',
+    'Manage the live site at approvideo.org',
   symbol: 'Activity', // LucideIcon
 }
 
