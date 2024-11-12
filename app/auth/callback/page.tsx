@@ -3,46 +3,51 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createBrowserClient } from '@supabase/ssr'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function AuthCallbackPage() {
   const router = useRouter()
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
+        // Check URL parameters first
+        const url = new URL(window.location.href)
+        const code = url.searchParams.get('code')
+        
+        // If we have a code, use it
+        if (code) {
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+          if (exchangeError) throw exchangeError
+          router.replace('/dashboard')  // Changed from push to replace
+          return
+        }
+
+        // If no code, check for hash fragment
         const hashFragment = window.location.hash
-        if (!hashFragment) {
-          throw new Error('No hash fragment in URL')
+        if (hashFragment) {
+          const params = new URLSearchParams(hashFragment.substring(1))
+          const accessToken = params.get('access_token')
+          
+          if (accessToken) {
+            // Verify session with the token
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+            if (sessionError) throw sessionError
+            
+            if (session) {
+              router.replace('/dashboard')  // Changed from push to replace
+              return
+            }
+          }
         }
 
-        // Get access token from hash
-        const params = new URLSearchParams(hashFragment.substring(1))
-        const accessToken = params.get('access_token')
+        throw new Error('Invalid callback URL format')
         
-        if (!accessToken) {
-          throw new Error('No access token found')
-        }
-
-        // Get the current session to verify the callback worked
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-        
-        if (sessionError) {
-          throw sessionError
-        }
-
-        if (session) {
-          router.push('/dashboard')
-        } else {
-          throw new Error('Session not established')
-        }
       } catch (error) {
         console.error('Auth callback error:', error)
-        router.push('/auth-test?error=' + encodeURIComponent((error as Error).message))
+        // Redirect to signin instead of auth-test to match your existing flow
+        router.replace('/auth/signin?error=' + encodeURIComponent((error as Error).message))
       }
     }
 
