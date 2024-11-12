@@ -9,6 +9,9 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/' // Removed extra 
   const redirectTo = new URL(next, origin) // Create URL object with origin
 
+
+  if (token_hash && type) {
+
   if (code) {
     const cookieStore = cookies()
     const supabase = createServerClient(
@@ -29,16 +32,17 @@ export async function GET(request: Request) {
       }
     )
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { error } = await supabase.auth.verifyOtp({ type, token_hash })
 
     if (!error) {
-      return NextResponse.redirect(redirectTo) // Removed extra  
-    } else {
-      console.error(error)
+      return NextResponse.redirect(redirectTo)
+    } else {  // Error handling block
+      console.error(error) // Log the error
       redirectTo.pathname = '/auth/auth-code-error'
-      return NextResponse.redirect(redirectTo) // Use redirectTo directly
+      return NextResponse.redirect(redirectTo) 
     }
   }
+}
 
   return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
