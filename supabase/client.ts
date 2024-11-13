@@ -1,16 +1,32 @@
 // supabase/client.ts
-import { createClient } from '@supabase/supabase-js'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient as createRawClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
+import type { Database } from '@/types/database'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Client Component client
+export const createClient = () => {
+  return createClientComponentClient<Database>()
+}
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    flowType: 'pkce',
-    detectSessionInUrl: true,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-})
+// Server Component client
+export const createServerClient = () => {
+  const cookieStore = cookies()
+  return createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  })
+}
 
-export default supabase
+// Raw client (for direct API access)
+export const createDirectClient = () => {
+  return createRawClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false,
+      }
+    }
+  )
+}
