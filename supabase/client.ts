@@ -3,7 +3,6 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { createClient as createRawClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
 import type { Database } from '@/types/database'
 
 // Client Component client
@@ -25,11 +24,4 @@ export const createDirectClient = () => {
   )
 }
 
-// Server Component client
-export const createServerClient = () => {
-  const cookieStore = cookies()
-  return createServerComponentClient<Database>({
-    cookies: () => cookieStore,
-  })
-}
 
