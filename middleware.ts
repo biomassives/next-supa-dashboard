@@ -1,26 +1,38 @@
-import { NextResponse, type NextRequest } from 'next/server'
-import { updateSession } from '@/supabase/middleware'
-import { Deny, denies } from '@/config/middleware'
+// @/middleware.ts
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-// Server Components only have read access to cookies.
-// This Middleware example can be used to refresh expired sessions before loading Server Component routes.
 export async function middleware(request: NextRequest) {
-  const { response, authenticated } = await updateSession(request)
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req: request, res })
 
-  const found = denies?.find((deny: Deny) =>
-    request.nextUrl.pathname.startsWith(deny.source)
-  )
+  try {
+    // Refresh the session if it exists
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    
+    if (sessionError) {
+      console.error('Session error in middleware:', sessionError)
+    }
 
-  if (found && found.authenticated === authenticated) {
-    return NextResponse.redirect(new URL(found.destination, request.url))
+    // Handle protected routes
+    if (request.nextUrl.pathname.startsWith('/dashboard')) {
+      if (!session) {
+        return NextResponse.redirect(new URL('/auth/signin', request.url))
+      }
+    }
+
+    // Handle auth routes when already authenticated
+    if (request.nextUrl.pathname.startsWith('/auth/signin') && session) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    return res
+
+  } catch (error) {
+    console.error('Middleware error:', error)
+    return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
-
-  const url = new URL(request.url)
-  response.headers.set('x-url', request.url)
-  response.headers.set('x-origin', url.origin)
-  response.headers.set('x-pathname', url.pathname)
-
-  return response
 }
 
 export const config = {
@@ -33,6 +45,7 @@ export const config = {
      * - favicon.ico (favicon file)
      */
     '/',
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+    '/dashboard/:path*',
+    '/auth/:path*'
+  ]
 }

@@ -1,3 +1,4 @@
+// components/signin-with-google.tsx
 'use client'
 
 import * as React from 'react'
@@ -27,15 +28,16 @@ const SignInWithGoogle = ({
       const next = (searchParams.get('next') as string) ?? '/dashboard'
 
       const supabase = createClient()
-      const signed = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           // A URL to send the user to after they are confirmed.
-          // Don't forget to change the URL in supabase's email template.
+          // Don't forget to change the URL in Supabase's email template.
           redirectTo:
             process.env.NEXT_PUBLIC_APP_URL + `/api/auth/callback?next=${next}`,
           // Google does not send out a refresh token by default,
-          // so you will need to pass parameters like these to signInWithOAuth() in order to extract the provider_refresh_token:
+          // so you will need to pass parameters like these to signInWithOAuth() 
+          // in order to extract the provider_refresh_token:
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -43,10 +45,13 @@ const SignInWithGoogle = ({
         },
       })
 
-      if (signed?.error) throw new Error(signed?.error?.message)
+      if (error) {
+        toast.error(error.message)
+      }
     } catch (e: unknown) {
       toast.error((e as Error)?.message)
     }
+
   }
 
   return (

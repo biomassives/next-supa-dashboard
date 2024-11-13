@@ -1,13 +1,12 @@
+// /context/auth-provider.tsx
 'use client'
 
 import * as React from 'react'
-
 import { Session, User } from '@supabase/supabase-js'
 import { createClient } from '@/supabase/client'
 
 /**
  * Listen to auth events
- *
  * @link https://supabase.com/docs/reference/javascript/auth-onauthstatechange
  */
 interface AuthContextProps {

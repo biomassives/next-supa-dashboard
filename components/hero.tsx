@@ -34,7 +34,7 @@ const Hero = () => {
             </Link>
             <Link
               className={cn(buttonVariants({ variant: 'outline' }))}
-              href="https://github.com/w3labkr/nextjs-supabase-dashboard"
+              href="https://approvideo.org"
               target="_blank"
             >
               {t('github')}

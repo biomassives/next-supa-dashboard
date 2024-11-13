@@ -1,3 +1,5 @@
+// /hooks/use-auth.ts
+
 'use client'
 
 import * as React from 'react'

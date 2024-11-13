@@ -8,10 +8,10 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'NextJS supabase dashboard',
-  title: 'NextJS supabase dashboard',
+  name: 'DIY Solutions',
+  title: 'A P P R O V I D E O',
   description:
-    'This is a dashboard starter template for the NextJS 14 app router using supabase based on shadcn-ui.',
+    'Manage the live site at approvideo.org',
   symbol: 'Activity', // LucideIcon
 }
 

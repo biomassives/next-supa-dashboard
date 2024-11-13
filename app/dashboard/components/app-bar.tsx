@@ -1,11 +1,10 @@
+// @/app/dashboard/components/app-bar.tsx
 'use client'
 
 import * as React from 'react'
-
 import { AccountMenu } from '@/components/account-menu'
 import { SiteBrand } from '@/components/site-brand'
 import { Notify } from '@/app/dashboard/components/notify'
-
 import { cn } from '@/lib/utils'
 
 interface AppBarProps extends React.HTMLAttributes<HTMLElement> {}

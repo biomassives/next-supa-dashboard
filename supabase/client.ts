@@ -1,14 +1,27 @@
-import { createBrowserClient } from '@supabase/ssr'
-import { type Database } from '@/types/supabase'
+// supabase/client.ts
+'use client'
 
-/**
- * Setting up Server-Side Auth for Next.js
- *
- * @link https://supabase.com/docs/guides/auth/server-side/nextjs
- */
-export function createClient() {
-  return createBrowserClient<Database>(
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient as createRawClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/database'
+
+// Client Component client
+export const createClient = () => {
+  return createClientComponentClient<Database>()
+}
+
+
+// Raw client (for direct API access)
+export const createDirectClient = () => {
+  return createRawClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false,
+      }
+    }
   )
 }
+
+

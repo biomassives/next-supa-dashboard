@@ -1,0 +1,130 @@
+// app/dashboard/admin/videos/video-table.tsx
+'use client'
+
+import { useState } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { createClient } from '@/supabase/client'
+
+interface Video {
+  id: string
+  title: string
+  url: string
+  description: string
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+  updated_at: string
+}
+
+export default function VideoTable() {
+  const [videos, setVideos] = useState<Video[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const handleStatusChange = async (videoId: string, newStatus: 'approved' | 'rejected') => {
+    const supabase = createClient()
+    try {
+      const { error } = await supabase
+        .from('videos')
+        .update({ status: newStatus })
+        .eq('id', videoId)
+
+      if (error) throw error
+      // Refresh the videos list
+      fetchVideos()
+    } catch (error) {
+      console.error('Error updating video status:', error)
+    }
+  }
+
+  const fetchVideos = async () => {
+    const supabase = createClient()
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('videos')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      setVideos(data || [])
+    } catch (error) {
+      console.error('Error fetching videos:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Video Submissions</h2>
+        <Button onClick={fetchVideos} disabled={loading}>
+          {loading ? 'Loading...' : 'Refresh'}
+        </Button>
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Title</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Submitted</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {videos.map((video) => (
+            <TableRow key={video.id}>
+              <TableCell className="font-medium">{video.title}</TableCell>
+              <TableCell>{video.description}</TableCell>
+              <TableCell>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    video.status === 'approved'
+                      ? 'bg-green-100 text-green-800'
+                      : video.status === 'rejected'
+                      ? 'bg-red-100 text-red-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}
+                >
+                  {video.status}
+                </span>
+              </TableCell>
+              <TableCell>
+                {new Date(video.created_at).toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleStatusChange(video.id, 'approved')}
+                    disabled={video.status === 'approved'}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleStatusChange(video.id, 'rejected')}
+                    disabled={video.status === 'rejected'}
+                  >
+                    Reject
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}

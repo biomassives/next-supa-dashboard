@@ -1,0 +1,805 @@
+.
+├── app
+│   ├── api
+│   │   ├── auth
+│   │   │   ├── callback
+│   │   │   │   └── route.ts
+│   │   │   └── confirm
+│   │   │       └── route.ts
+│   │   ├── cron
+│   │   │   └── daily-reset-posts
+│   │   │       └── route.ts
+│   │   ├── ip
+│   │   │   └── route.ts
+│   │   ├── revalidate
+│   │   │   └── route.ts
+│   │   ├── v1
+│   │   │   ├── email
+│   │   │   │   ├── list
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── route.ts
+│   │   │   │   └── verify
+│   │   │   │       └── route.ts
+│   │   │   ├── favorite
+│   │   │   │   └── route.ts
+│   │   │   ├── notification
+│   │   │   │   └── route.ts
+│   │   │   ├── notify
+│   │   │   │   └── route.ts
+│   │   │   ├── post
+│   │   │   │   ├── count
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── list
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── rank
+│   │   │   │   │   └── route.ts
+│   │   │   │   └── route.ts
+│   │   │   ├── statistic
+│   │   │   │   └── list
+│   │   │   │       └── route.ts
+│   │   │   ├── tag
+│   │   │   │   ├── list
+│   │   │   │   │   └── route.ts
+│   │   │   │   └── route.ts
+│   │   │   └── user
+│   │   │       ├── list
+│   │   │       │   └── route.ts
+│   │   │       └── route.ts
+│   │   └── verify
+│   │       └── email
+│   │           └── route.ts
+│   ├── auth
+│   │   ├── auth-code-error
+│   │   │   └── page.tsx
+│   │   ├── blocked
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── callback
+│   │   │   └── page.tsx
+│   │   ├── forgot-password
+│   │   │   ├── forgot-password-form.tsx
+│   │   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── reset-password
+│   │   │   ├── page.tsx
+│   │   │   └── reset-password-form.tsx
+│   │   ├── signin
+│   │   │   ├── page.tsx
+│   │   │   └── signin-form.tsx
+│   │   └── signup
+│   │       ├── page.tsx
+│   │       ├── policy.tsx
+│   │       └── signup-form.tsx
+│   ├── auth-test
+│   │   └── page.tsx
+│   ├── dashboard
+│   │   ├── admin
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── appearance
+│   │   │   ├── change-language-form.tsx
+│   │   │   ├── change-theme-form.tsx
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── components
+│   │   │   ├── app-bar.tsx
+│   │   │   ├── app-panel.tsx
+│   │   │   ├── demo-site-warning-notification.tsx
+│   │   │   ├── navigation.tsx
+│   │   │   └── notify.tsx
+│   │   ├── dashboard
+│   │   │   ├── index.tsx
+│   │   │   ├── latest-posts.tsx
+│   │   │   └── post-ranks.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── posts
+│   │   │   ├── components
+│   │   │   │   ├── add-dummy-post.tsx
+│   │   │   │   ├── add-post.tsx
+│   │   │   │   ├── bulk-actions
+│   │   │   │   │   ├── bulk-actions-provider.tsx
+│   │   │   │   │   ├── bulk-actions.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── head-link.tsx
+│   │   │   │   ├── quick-links
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── quick-delete.tsx
+│   │   │   │   │   ├── quick-draft.tsx
+│   │   │   │   │   ├── quick-edit.tsx
+│   │   │   │   │   ├── quick-private.tsx
+│   │   │   │   │   ├── quick-public.tsx
+│   │   │   │   │   ├── quick-publish.tsx
+│   │   │   │   │   ├── quick-restore.tsx
+│   │   │   │   │   ├── quick-trash.tsx
+│   │   │   │   │   └── quick-view.tsx
+│   │   │   │   └── search-form.tsx
+│   │   │   ├── edit
+│   │   │   │   ├── components
+│   │   │   │   │   ├── back-link.tsx
+│   │   │   │   │   ├── ckeditor5
+│   │   │   │   │   │   ├── editor.tsx
+│   │   │   │   │   │   ├── style.css
+│   │   │   │   │   │   └── supabase-upload-adapter.ts
+│   │   │   │   │   ├── fields
+│   │   │   │   │   │   ├── field-meta.tsx
+│   │   │   │   │   │   ├── field-title.tsx
+│   │   │   │   │   │   ├── field-user-id.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── metaboxes
+│   │   │   │   │       ├── index.ts
+│   │   │   │   │       ├── metabox-description.tsx
+│   │   │   │   │       ├── metabox-future-date.tsx
+│   │   │   │   │       ├── metabox-keywords.tsx
+│   │   │   │   │       ├── metabox-permalink.tsx
+│   │   │   │   │       ├── metabox-publish.tsx
+│   │   │   │   │       ├── metabox-restriction.tsx
+│   │   │   │   │       ├── metabox-revisions.tsx
+│   │   │   │   │       ├── metabox-slug.tsx
+│   │   │   │   │       ├── metabox-tags.tsx
+│   │   │   │   │       └── metabox-thumbnail.tsx
+│   │   │   │   ├── context
+│   │   │   │   │   └── post-form-provider.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── post-form.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── post-list.tsx
+│   │   ├── settings
+│   │   │   ├── account
+│   │   │   │   ├── change-username-form.tsx
+│   │   │   │   ├── deactivate-user-form.tsx
+│   │   │   │   ├── delete-user-form.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── emails
+│   │   │   │   ├── components
+│   │   │   │   │   ├── add-email.tsx
+│   │   │   │   │   ├── delete-email.tsx
+│   │   │   │   │   ├── edit-primary-email.tsx
+│   │   │   │   │   └── resend-verify-email.tsx
+│   │   │   │   ├── email-list.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── notifications
+│   │   │   │   ├── notifications-form.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── page.tsx
+│   │   │   ├── security
+│   │   │   │   ├── change-password-form.tsx
+│   │   │   │   ├── manage-2fa-form.tsx
+│   │   │   │   └── page.tsx
+│   │   │   └── sessions
+│   │   │       ├── page.tsx
+│   │   │       └── sessions-form.tsx
+│   │   ├── tags
+│   │   │   ├── components
+│   │   │   │   ├── add-tag.tsx
+│   │   │   │   ├── bulk-actions
+│   │   │   │   │   ├── bulk-actions-provider.tsx
+│   │   │   │   │   ├── bulk-actions.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── quick-links
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── quick-delete.tsx
+│   │   │   │   │   ├── quick-edit.tsx
+│   │   │   │   │   └── quick-view.tsx
+│   │   │   │   └── search-form.tsx
+│   │   │   ├── edit
+│   │   │   │   ├── components
+│   │   │   │   │   ├── back-link.tsx
+│   │   │   │   │   ├── fields
+│   │   │   │   │   │   ├── field-meta.tsx
+│   │   │   │   │   │   ├── field-name.tsx
+│   │   │   │   │   │   ├── field-post-tags.tsx
+│   │   │   │   │   │   ├── field-user-id.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── metaboxes
+│   │   │   │   │       ├── index.ts
+│   │   │   │   │       ├── metabox-description.tsx
+│   │   │   │   │       ├── metabox-publish.tsx
+│   │   │   │   │       └── metabox-slug.tsx
+│   │   │   │   ├── context
+│   │   │   │   │   └── tag-form-provider.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── tag-form.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── tag-list.tsx
+│   │   └── users
+│   │       ├── layout.tsx
+│   │       ├── page.tsx
+│   │       └── profile
+│   │           ├── page.tsx
+│   │           └── profile-form.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   ├── policy
+│   │   ├── privacy
+│   │   │   └── page.tsx
+│   │   └── terms
+│   │       └── page.tsx
+│   ├── posts
+│   │   ├── page.tsx
+│   │   └── sitemap.ts
+│   ├── robots.ts
+│   ├── search
+│   │   └── page.tsx
+│   ├── sitemap.ts
+│   └── [username]
+│       ├── aside.tsx
+│       ├── components
+│       │   └── tab-link.tsx
+│       ├── favorites
+│       │   ├── page.tsx
+│       │   └── post-list.tsx
+│       ├── layout.tsx
+│       ├── page.tsx
+│       ├── post-list.tsx
+│       ├── [slug]
+│       │   ├── favorite-button.tsx
+│       │   ├── page.tsx
+│       │   ├── post-views.tsx
+│       │   └── related-posts.tsx
+│       └── statistics.tsx
+├── clean.pl
+├── components
+│   ├── account-menu.tsx
+│   ├── auth-test.tsx
+│   ├── banners
+│   │   ├── index.ts
+│   │   └── upgrade-pro-banner.tsx
+│   ├── button-link.tsx
+│   ├── copyright.tsx
+│   ├── country-flag-button.tsx
+│   ├── description.tsx
+│   ├── error.tsx
+│   ├── footer.tsx
+│   ├── header.tsx
+│   ├── hentry
+│   │   ├── entry-author.tsx
+│   │   ├── entry-published.tsx
+│   │   ├── entry-summary.tsx
+│   │   ├── entry-tags.tsx
+│   │   ├── entry-title.tsx
+│   │   ├── entry-updated.tsx
+│   │   └── index.ts
+│   ├── hero.tsx
+│   ├── language-combobox.tsx
+│   ├── latest-posts
+│   │   ├── index.tsx
+│   │   └── latest-posts.tsx
+│   ├── mobile-navigation.tsx
+│   ├── navigation.tsx
+│   ├── paging
+│   │   ├── index.tsx
+│   │   ├── paging-provider.tsx
+│   │   └── paging.tsx
+│   ├── search-form-dialog.tsx
+│   ├── search-form.tsx
+│   ├── signin-with-github.tsx
+│   ├── signin-with-google.tsx
+│   ├── signin-with.tsx
+│   ├── signout-button.tsx
+│   ├── site-brand.tsx
+│   ├── site-logo.tsx
+│   ├── tailwind-indicator.tsx
+│   ├── text-link.tsx
+│   ├── theme-toggle.tsx
+│   ├── time-picker.tsx
+│   ├── title.tsx
+│   ├── ui
+│   │   ├── accordion.tsx
+│   │   ├── alert-dialog.tsx
+│   │   ├── alert.tsx
+│   │   ├── aspect-ratio.tsx
+│   │   ├── avatar.tsx
+│   │   ├── badge.tsx
+│   │   ├── breadcrumb.tsx
+│   │   ├── button.tsx
+│   │   ├── calendar.tsx
+│   │   ├── card.tsx
+│   │   ├── carousel.tsx
+│   │   ├── chart.tsx
+│   │   ├── checkbox.tsx
+│   │   ├── collapsible.tsx
+│   │   ├── command.tsx
+│   │   ├── context-menu.tsx
+│   │   ├── dialog.tsx
+│   │   ├── drawer.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   ├── form.tsx
+│   │   ├── hover-card.tsx
+│   │   ├── input-otp.tsx
+│   │   ├── input.tsx
+│   │   ├── label.tsx
+│   │   ├── menubar.tsx
+│   │   ├── navigation-menu.tsx
+│   │   ├── pagination.tsx
+│   │   ├── popover.tsx
+│   │   ├── progress.tsx
+│   │   ├── radio-group.tsx
+│   │   ├── resizable.tsx
+│   │   ├── scroll-area.tsx
+│   │   ├── select.tsx
+│   │   ├── separator.tsx
+│   │   ├── sheet.tsx
+│   │   ├── skeleton.tsx
+│   │   ├── slider.tsx
+│   │   ├── sonner.tsx
+│   │   ├── switch.tsx
+│   │   ├── table.tsx
+│   │   ├── tabs.tsx
+│   │   ├── textarea.tsx
+│   │   ├── toaster.tsx
+│   │   ├── toast.tsx
+│   │   ├── toggle-group.tsx
+│   │   ├── toggle.tsx
+│   │   ├── tooltip.tsx
+│   │   └── use-toast.ts
+│   └── ui-custom
+│       ├── accordion.tsx
+│       ├── command.tsx
+│       ├── pagination.tsx
+│       └── time-picker-input
+│           ├── index.tsx
+│           └── time-picker-utils.tsx
+├── components.json
+├── config
+│   ├── dashboard.ts
+│   ├── middleware.ts
+│   └── site.ts
+├── context
+│   ├── app-provider.tsx
+│   ├── auth-provider.tsx
+│   ├── i18n-provider.tsx
+│   ├── swr-provider.tsx
+│   └── theme-provider.tsx
+├── docs
+│   ├── CONFIGURATION.md
+│   ├── DEPLOYING.md
+│   ├── EXAMPLES.md
+│   ├── INSTALLATION.md
+│   └── LINTER.md
+├── hooks
+│   ├── headers
+│   │   ├── index.ts
+│   │   └── url.ts
+│   ├── i18next
+│   │   ├── get-translation.ts
+│   │   ├── index.ts
+│   │   └── use-trans.tsx
+│   ├── url
+│   │   ├── index.ts
+│   │   └── use-query-string.ts
+│   └── use-auth.ts
+├── i18next.config.ts
+├── lib
+│   ├── country-flag-icons.tsx
+│   ├── dayjs.ts
+│   ├── emblor.ts
+│   ├── i18next.ts
+│   ├── jsonwebtoken.ts
+│   ├── lucide-icon.tsx
+│   ├── nodemailer.ts
+│   ├── redux
+│   │   ├── hooks.ts
+│   │   ├── persist-provider.tsx
+│   │   ├── redux-provider.tsx
+│   │   ├── storage.ts
+│   │   ├── store-provider.tsx
+│   │   └── store.ts
+│   ├── slugify.ts
+│   └── utils
+│       ├── cache.ts
+│       ├── cookie.ts
+│       ├── dummy-text.ts
+│       ├── error.ts
+│       ├── fetcher.ts
+│       ├── functions.ts
+│       ├── http-status-codes.ts
+│       ├── index.ts
+│       ├── tailwind.ts
+│       └── url.ts
+├── LICENSE
+├── LICENSE.md
+├── managed_context
+│   └── metadata.json
+├── middleware.ts
+├── next.config.js
+├── next-env.d.ts
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── public
+│   ├── assets
+│   │   ├── icons
+│   │   │   ├── icon-192x192.png
+│   │   │   ├── icon-256x256.png
+│   │   │   ├── icon-384x384.png
+│   │   │   ├── icon-512x512.png
+│   │   │   └── icon.svg
+│   │   └── images
+│   │       └── main
+│   │           ├── photo-1481277542470-605612bd2d61.jpg
+│   │           ├── photo-1516455207990-7a41ce80f7ee.jpg
+│   │           ├── photo-1517487881594-2787fef5ebf7.jpg
+│   │           ├── photo-1519710164239-da123dc03ef4.jpg
+│   │           ├── photo-1523413651479-597eb2da0ad6.jpg
+│   │           ├── photo-1525097487452-6278ff080c31.jpg
+│   │           ├── photo-1530731141654-5993c3016c77.jpg
+│   │           ├── photo-1549388604-817d15aa0110.jpg
+│   │           ├── photo-1563298723-dcfebaa392e3.jpg
+│   │           ├── photo-1574180045827-681f8a1a9622.jpg
+│   │           ├── photo-1588436706487-9d55d73a39e3.jpg
+│   │           └── photo-1597262975002-c5c3b14bbd62.jpg
+│   ├── data
+│   │   ├── countries
+│   │   │   ├── countries.json
+│   │   │   ├── languages-all.json
+│   │   │   └── languages.json
+│   │   └── country-flag-icons
+│   │       ├── AC.svg
+│   │       ├── AD.svg
+│   │       ├── AE.svg
+│   │       ├── AF.svg
+│   │       ├── AG.svg
+│   │       ├── AI.svg
+│   │       ├── AL.svg
+│   │       ├── AM.svg
+│   │       ├── AO.svg
+│   │       ├── AQ.svg
+│   │       ├── AR.svg
+│   │       ├── AS.svg
+│   │       ├── AT.svg
+│   │       ├── AU.svg
+│   │       ├── AW.svg
+│   │       ├── AX.svg
+│   │       ├── AZ.svg
+│   │       ├── BA.svg
+│   │       ├── BB.svg
+│   │       ├── BD.svg
+│   │       ├── BE.svg
+│   │       ├── BF.svg
+│   │       ├── BG.svg
+│   │       ├── BH.svg
+│   │       ├── BI.svg
+│   │       ├── BJ.svg
+│   │       ├── BL.svg
+│   │       ├── BM.svg
+│   │       ├── BN.svg
+│   │       ├── BO.svg
+│   │       ├── BQ.svg
+│   │       ├── BR.svg
+│   │       ├── BS.svg
+│   │       ├── BT.svg
+│   │       ├── BV.svg
+│   │       ├── BW.svg
+│   │       ├── BY.svg
+│   │       ├── BZ.svg
+│   │       ├── CA.svg
+│   │       ├── CC.svg
+│   │       ├── CD.svg
+│   │       ├── CF.svg
+│   │       ├── CG.svg
+│   │       ├── CH.svg
+│   │       ├── CI.svg
+│   │       ├── CK.svg
+│   │       ├── CL.svg
+│   │       ├── CM.svg
+│   │       ├── CN.svg
+│   │       ├── CO.svg
+│   │       ├── CR.svg
+│   │       ├── CU.svg
+│   │       ├── CV.svg
+│   │       ├── CW.svg
+│   │       ├── CX.svg
+│   │       ├── CY.svg
+│   │       ├── CZ.svg
+│   │       ├── DE.svg
+│   │       ├── DJ.svg
+│   │       ├── DK.svg
+│   │       ├── DM.svg
+│   │       ├── DO.svg
+│   │       ├── DZ.svg
+│   │       ├── EC.svg
+│   │       ├── EE.svg
+│   │       ├── EG.svg
+│   │       ├── EH.svg
+│   │       ├── ER.svg
+│   │       ├── ES.svg
+│   │       ├── ET.svg
+│   │       ├── EU.svg
+│   │       ├── FI.svg
+│   │       ├── FJ.svg
+│   │       ├── FK.svg
+│   │       ├── flags.css
+│   │       ├── FM.svg
+│   │       ├── FO.svg
+│   │       ├── FR.svg
+│   │       ├── GA.svg
+│   │       ├── GB.svg
+│   │       ├── GD.svg
+│   │       ├── GE-AB.svg
+│   │       ├── GE-OS.svg
+│   │       ├── GE.svg
+│   │       ├── GF.svg
+│   │       ├── GG.svg
+│   │       ├── GH.svg
+│   │       ├── GI.svg
+│   │       ├── GL.svg
+│   │       ├── GM.svg
+│   │       ├── GN.svg
+│   │       ├── GP.svg
+│   │       ├── GQ.svg
+│   │       ├── GR.svg
+│   │       ├── GS.svg
+│   │       ├── GT.svg
+│   │       ├── GU.svg
+│   │       ├── GW.svg
+│   │       ├── GY.svg
+│   │       ├── HK.svg
+│   │       ├── HM.svg
+│   │       ├── HN.svg
+│   │       ├── HR.svg
+│   │       ├── HT.svg
+│   │       ├── HU.svg
+│   │       ├── IC.svg
+│   │       ├── ID.svg
+│   │       ├── IE.svg
+│   │       ├── IL.svg
+│   │       ├── IM.svg
+│   │       ├── index.html
+│   │       ├── IN.svg
+│   │       ├── IO.svg
+│   │       ├── IQ.svg
+│   │       ├── IR.svg
+│   │       ├── IS.svg
+│   │       ├── IT.svg
+│   │       ├── JE.svg
+│   │       ├── JM.svg
+│   │       ├── JO.svg
+│   │       ├── JP.svg
+│   │       ├── KE.svg
+│   │       ├── KG.svg
+│   │       ├── KH.svg
+│   │       ├── KI.svg
+│   │       ├── KM.svg
+│   │       ├── KN.svg
+│   │       ├── KP.svg
+│   │       ├── KR.svg
+│   │       ├── KW.svg
+│   │       ├── KY.svg
+│   │       ├── KZ.svg
+│   │       ├── LA.svg
+│   │       ├── LB.svg
+│   │       ├── LC.svg
+│   │       ├── LI.svg
+│   │       ├── LK.svg
+│   │       ├── LR.svg
+│   │       ├── LS.svg
+│   │       ├── LT.svg
+│   │       ├── LU.svg
+│   │       ├── LV.svg
+│   │       ├── LY.svg
+│   │       ├── MA.svg
+│   │       ├── MC.svg
+│   │       ├── MD.svg
+│   │       ├── ME.svg
+│   │       ├── MF.svg
+│   │       ├── MG.svg
+│   │       ├── MH.svg
+│   │       ├── MK.svg
+│   │       ├── ML.svg
+│   │       ├── MM.svg
+│   │       ├── MN.svg
+│   │       ├── MO.svg
+│   │       ├── MP.svg
+│   │       ├── MQ.svg
+│   │       ├── MR.svg
+│   │       ├── MS.svg
+│   │       ├── MT.svg
+│   │       ├── MU.svg
+│   │       ├── MV.svg
+│   │       ├── MW.svg
+│   │       ├── MX.svg
+│   │       ├── MY.svg
+│   │       ├── MZ.svg
+│   │       ├── NA.svg
+│   │       ├── NC.svg
+│   │       ├── NE.svg
+│   │       ├── NF.svg
+│   │       ├── NG.svg
+│   │       ├── NI.svg
+│   │       ├── NL.svg
+│   │       ├── NO.svg
+│   │       ├── NP.svg
+│   │       ├── NR.svg
+│   │       ├── NU.svg
+│   │       ├── NZ.svg
+│   │       ├── OM.svg
+│   │       ├── PA.svg
+│   │       ├── PE.svg
+│   │       ├── PF.svg
+│   │       ├── PG.svg
+│   │       ├── PH.svg
+│   │       ├── PK.svg
+│   │       ├── PL.svg
+│   │       ├── PM.svg
+│   │       ├── PN.svg
+│   │       ├── PR.svg
+│   │       ├── PS.svg
+│   │       ├── PT.svg
+│   │       ├── PW.svg
+│   │       ├── PY.svg
+│   │       ├── QA.svg
+│   │       ├── RE.svg
+│   │       ├── RO.svg
+│   │       ├── RS.svg
+│   │       ├── RU.svg
+│   │       ├── RW.svg
+│   │       ├── SA.svg
+│   │       ├── SB.svg
+│   │       ├── SC.svg
+│   │       ├── SD.svg
+│   │       ├── SE.svg
+│   │       ├── SG.svg
+│   │       ├── SH.svg
+│   │       ├── SI.svg
+│   │       ├── SJ.svg
+│   │       ├── SK.svg
+│   │       ├── SL.svg
+│   │       ├── SM.svg
+│   │       ├── SN.svg
+│   │       ├── SO.svg
+│   │       ├── SR.svg
+│   │       ├── SS.svg
+│   │       ├── ST.svg
+│   │       ├── SV.svg
+│   │       ├── SX.svg
+│   │       ├── SY.svg
+│   │       ├── SZ.svg
+│   │       ├── TA.svg
+│   │       ├── TC.svg
+│   │       ├── TD.svg
+│   │       ├── TF.svg
+│   │       ├── TG.svg
+│   │       ├── TH.svg
+│   │       ├── TJ.svg
+│   │       ├── TK.svg
+│   │       ├── TL.svg
+│   │       ├── TM.svg
+│   │       ├── TN.svg
+│   │       ├── TO.svg
+│   │       ├── TR.svg
+│   │       ├── TT.svg
+│   │       ├── TV.svg
+│   │       ├── TW.svg
+│   │       ├── TZ.svg
+│   │       ├── UA.svg
+│   │       ├── UG.svg
+│   │       ├── UM.svg
+│   │       ├── US.svg
+│   │       ├── UY.svg
+│   │       ├── UZ.svg
+│   │       ├── VA.svg
+│   │       ├── VC.svg
+│   │       ├── VE.svg
+│   │       ├── VG.svg
+│   │       ├── VI.svg
+│   │       ├── VN.svg
+│   │       ├── VU.svg
+│   │       ├── WF.svg
+│   │       ├── WS.svg
+│   │       ├── XK.svg
+│   │       ├── YE.svg
+│   │       ├── YT.svg
+│   │       ├── ZA.svg
+│   │       ├── ZM.svg
+│   │       └── ZW.svg
+│   ├── locales
+│   │   ├── en
+│   │   │   ├── components.json
+│   │   │   ├── httpstatuscode.json
+│   │   │   ├── translation.json
+│   │   │   ├── zod-custom.json
+│   │   │   └── zod.json
+│   │   └── ko
+│   │       ├── components.json
+│   │       ├── httpstatuscode.json
+│   │       ├── translation.json
+│   │       ├── zod-custom.json
+│   │       └── zod.json
+│   ├── manifest.json
+│   ├── next.svg
+│   ├── sw.js
+│   ├── vercel.svg
+│   └── workbox-4754cb34.js
+├── queries
+│   ├── client
+│   │   ├── emails.ts
+│   │   ├── favorites.ts
+│   │   ├── notifications.ts
+│   │   ├── posts.ts
+│   │   ├── statistics.ts
+│   │   ├── tags.ts
+│   │   └── users.ts
+│   └── server
+│       ├── auth.ts
+│       ├── posts.ts
+│       └── users.ts
+├── README.md
+├── screenshot.png
+├── screenshots
+│   ├── 01.main.png
+│   ├── 02.signin.png
+│   ├── 03.signup.png
+│   ├── 04.forgot-password.png
+│   ├── 05.reset-password.png
+│   ├── 06.profile.png
+│   ├── 07.favorites.png
+│   ├── 08.posts.png
+│   ├── 09.post.png
+│   ├── 10.search.png
+│   ├── 20.dashboard.png
+│   ├── 30.posts.png
+│   ├── 31.post.png
+│   ├── 32.tags.png
+│   ├── 33.tag.png
+│   ├── 40.appearance.png
+│   ├── 50.profile.png
+│   ├── 60.account.png
+│   ├── 61.notifications.png
+│   ├── 62.emails.png
+│   └── 63.security.png
+├── store
+│   ├── reducers
+│   │   └── app-reducer.ts
+│   └── root-reducer.ts
+├── structure.txt
+├── supabase
+│   ├── client.ts
+│   ├── middleware.ts
+│   ├── schemas
+│   │   ├── auth
+│   │   │   └── users.sql
+│   │   ├── cat.sh
+│   │   ├── concatenated_output.sql
+│   │   ├── cron
+│   │   │   ├── job_scheduling.sql
+│   │   │   └── pg_cron.sql
+│   │   ├── public
+│   │   │   ├── emails.sql
+│   │   │   ├── favorites.sql
+│   │   │   ├── notifications.sql
+│   │   │   ├── postmeta.sql
+│   │   │   ├── posts.sql
+│   │   │   ├── post_tags.sql
+│   │   │   ├── role_permissions.sql
+│   │   │   ├── statistics.sql
+│   │   │   ├── tagmeta.sql
+│   │   │   ├── tags.sql
+│   │   │   ├── usermeta.sql
+│   │   │   ├── users.sql
+│   │   │   └── votes.sql
+│   │   └── storage
+│   │       └── buckets.sql
+│   ├── seed.sql
+│   └── server.ts
+├── tailwind.config.js
+├── test_suite_analysis
+│   └── metadata.json
+├── tsconfig.json
+├── types
+│   ├── api.ts
+│   ├── ckeditor5-react
+│   │   └── index.d.ts
+│   ├── database.ts
+│   ├── index.d.ts
+│   ├── supabase.ts
+│   └── token.ts
+└── _vercel.json
+
+124 directories, 678 files

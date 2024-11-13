@@ -1,4 +1,5 @@
-# NextJS Supabase Dashboard
+########## Appovideo Libay Manager Tool
+## via NextJS Supabase Dashboard
 
 This is a dashboard starter template for the [NextJS](https://nextjs.org) 14 app router using supabase based on [shadcn-ui](https://ui.shadcn.com).
 
