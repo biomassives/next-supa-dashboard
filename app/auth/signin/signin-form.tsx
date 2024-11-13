@@ -44,12 +44,44 @@ const SignInForm = () => {
     defaultValues,
   })
 
+
+  // Add dev login function
+  const handleDevLogin = async () => {
+    const supabase = createClient()
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: 'dev@approvideo.org',    // Replace with your dev email
+        password: 'devpass123'          // Replace with your dev password
+      })
+
+      if (error) throw error
+
+      toast.success('Dev login successful')
+      window.location.href = '/dashboard'  // Force reload to ensure auth state
+    } catch (error) {
+      console.error('Dev login failed:', error)
+      toast.error('Dev login failed')
+    }
+  }
+
+
   return (
     <Form {...form}>
       <form method="POST" noValidate className="space-y-4">
         <EmailField />
         <PasswordField />
         <SubmitButton />
+
+        <Button
+            type="button"
+            variant="secondary"
+            onClick={handleDevLogin}
+            className="w-full mt-2"
+          >
+            Dev Login
+          </Button>
+
+
       </form>
     </Form>
   )
