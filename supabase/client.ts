@@ -1,14 +1,16 @@
-import { createBrowserClient } from '@supabase/ssr'
-import { type Database } from '@/types/supabase'
+// supabase/client.ts
+import { createClient } from '@supabase/supabase-js'
 
-/**
- * Setting up Server-Side Auth for Next.js
- *
- * @link https://supabase.com/docs/guides/auth/server-side/nextjs
- */
-export function createClient() {
-  return createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    flowType: 'pkce',
+    detectSessionInUrl: true,
+    persistSession: true,
+    autoRefreshToken: true,
+  }
+})
+
+export default supabase
