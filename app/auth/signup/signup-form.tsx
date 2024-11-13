@@ -1,3 +1,4 @@
+//  app/auth/signup/signup-form.tsx
 'use client'
 
 import * as React from 'react'
@@ -236,7 +237,6 @@ const ConfirmNewPasswordField = () => {
 const SubmitButton = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { handleSubmit, setError, getValues } = useFormContext()
   const { setSession, setUser } = useAuth()
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
   const { handleSubmit, setError, getValues, formState } = useFormContext() // Added formState here
